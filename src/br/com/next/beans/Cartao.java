@@ -1,10 +1,13 @@
 package br.com.next.beans;
 
-public class Cartao {
+import java.util.UUID;
+
+public abstract class Cartao  {
 	private String numero;
 	private String bandeira;
 	private String senha;
 	private boolean ativo;
+
 
 	public String getNumero() {
 		return numero;
@@ -37,5 +40,18 @@ public class Cartao {
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
 	}
+
+	public Cartao(String senha) {
+		this.numero = UUID.randomUUID().toString();
+		this.bandeira = "Mastercard";
+		this.senha = senha;
+		this.ativo = true;
+	}
+	
+	public Cartao() {
+	}
+	
+	
+	
 
 }

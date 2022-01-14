@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import br.com.next.beans.Cartao;
+import br.com.next.beans.CartaoDebito;
 import br.com.next.beans.Cliente;
 import br.com.next.beans.Conta;
 import br.com.next.beans.TipoCliente;
@@ -35,7 +37,6 @@ public class ContaBo {
 		Date date = cal.getTime();
 		conta.setData(date);
 		Dados.insereConta(conta.getNumeroConta(), conta);
-		// System.out.println("Cadastro concluido com sucesso");
 		System.out.println("Cliente " + cliente.getNome() + " numero da conta " + conta.getNumeroConta());
 		System.out.println(conta.getTipoConta());
 		return conta;
@@ -117,6 +118,21 @@ public class ContaBo {
 		}
 
 	}
+
+	public void addCartao(Cartao cartao) {
+		conta.addCartao(cartao);
+		Dados.insereConta(this.conta.getNumeroConta(), conta);
+	}
+
+	public void removerCartao(String num) {
+		conta.removeCartao(num);
+		Dados.insereConta(this.conta.getNumeroConta(), conta);		
+	}
+	
+
+
+	
+	
 
 	/*
 	 * public void adicionarPix(Pix pix) { this.conta.setPix(pix);

@@ -26,7 +26,7 @@ public class Teste {
 		System.out.println("Bem vido ao Next");
 		while (opcao != 0) {
 			System.out.println(
-					"----------------------------\n1 - Cadastro Cliente \n2 - Transferencia \n3 - Deposito \n4 - Consulta \n5 - Credito/Debito \n6 - Cadastrar chave PIX \n7 - Transferencia Pix \n8 - Sair \n----------------------------");
+					"----------------------------\n1 - Cadastro Cliente \n2 - Transferencia \n3 - Deposito \n4 - Consulta \n5 - Cadastrar chave PIX \n6 - Transferencia Pix \n8 - Sair \n----------------------------");
 
 			opcao = sc.nextInt();
 			if (opcao == 1) {
@@ -35,7 +35,7 @@ public class Teste {
 					continue;
 				}
 
-				System.out.println("Digite 1 para conta corrente ou 2 para poupança");
+				System.out.println("Digite 1 para conta corrente 2 para poupança ou 3 para ambas");
 				int opcaoConta = sc.nextInt();
 
 				String cpf = cliente.getCpf();
@@ -61,6 +61,7 @@ public class Teste {
 					System.out.println("Opção invalida! Tente novamente");
 					opcaoConta = sc.nextInt();
 				}
+
 			}
 
 			else if (opcao == 2) {
@@ -112,15 +113,7 @@ public class Teste {
 				ContaBo contaB = new ContaBo(conta);
 				contaB.exibeSaldo();
 
-			} else if (opcao == 5) {
-				List<Conta> listConta = Dados.buscarTodasAsContas();
-
-				for (Conta conta : listConta) {
-					ContaBo contaB = new ContaBo(conta);
-					contaB.debitoCredito();
-				}
-
-			} else if (opcao == 6) {
+			}  else if (opcao == 5) {
 				System.out.println("Número da sua conta: ");
 				String numConta = sc.next();
 				Conta conta = Dados.buscaConta(numConta);
@@ -152,17 +145,17 @@ public class Teste {
 					}
 				}
 
-				Pix pix = new Pix();
-				pix.setAtivo(true);
-				pix.setTipoChave(tcp);
-				pix.setChave(chavePix);
-				pix.setTipoChave(tcp);
+				Pix pix = new Pix(tcp, chavePix, false);
+				//pix.setAtivo(true);
+				//pix.setTipoChave(tcp);
+				//pix.setChave(chavePix);
+				//pix.setTipoChave(tcp);
 
 				ContaBo contaBo = new ContaBo(conta);
 				conta.setPix(pix);
 				System.out.println(pix.getChave());
 				// contaBo.adicionarPix(pix);
-			} else if (opcao == 7) {
+			} else if (opcao == 6) {
 				System.out.println("Número da conta recebedora: ");
 				String numConta = sc.next();
 				Conta conta = Dados.buscaConta(numConta);

@@ -1,9 +1,22 @@
 package br.com.next.beans;
 
+import java.util.Date;
+
 public class CartaoCredito extends Cartao {
 	private String id;
-	private int limite;
-	private int valorFatura;
+	private double limite;
+	private double valorFatura;
+	private Date vencimento;
+	
+	public CartaoCredito() {
+	}
+	
+	public CartaoCredito(String senha, double limite, Date vencimento) {
+		super(senha);
+		this.limite = limite;
+		this.valorFatura = 0;
+		this.vencimento = vencimento;
+	}
 
 	public String getId() {
 		return id;
@@ -13,20 +26,35 @@ public class CartaoCredito extends Cartao {
 		this.id = id;
 	}
 
-	public int getLimite() {
+	public double getLimite() {
 		return limite;
 	}
 
-	public void setLimite(int limite) {
+	public void setLimite(double limite) {
 		this.limite = limite;
 	}
 
-	public int getValorFatura() {
+	public double getValorFatura() {
 		return valorFatura;
 	}
 
-	public void setValorFatura(int valorFatura) {
+	public void setValorFatura(double valorFatura) {
 		this.valorFatura = valorFatura;
 	}
+
+	public Date getVencimento() {
+		return vencimento;
+	}
+
+	public void setVencimento(Date vencimento) {
+		this.vencimento = vencimento;
+	}
+	
+	
+
+
+	
+	
+	
 
 }

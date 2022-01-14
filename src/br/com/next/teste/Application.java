@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import br.com.next.beans.CartaoCredito;
+import br.com.next.beans.CartaoDebito;
 import br.com.next.beans.Cliente;
 import br.com.next.beans.Conta;
 import br.com.next.beans.Endereco;
@@ -19,7 +21,7 @@ import br.com.next.utils.Dados;
 
 public class Application {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		Scanner sc = new Scanner(System.in);
 
 		int opcao = 5;
@@ -61,6 +63,7 @@ public class Application {
 					System.out.println("Opção invalida! Tente novamente");
 					opcaoConta = sc.nextInt();
 				}
+
 			} else if (opcao == 2) {
 				System.out.println("Conta ");
 				String numConta = sc.next();
@@ -144,8 +147,53 @@ public class Application {
 
 						contaB.transferir(contaRecebe, valor);
 					} else if (opc == 6) {
+						int opCartao;
+						System.out.println("1 para credito 2 para debito");
+						opCartao = sc.nextInt();
+						System.out.println("senha: ");
+						String senha1 = sc.next();
+						if (opCartao == 1) {
+							CartaoCredito credito = new CartaoCredito();
+							System.out.println("Data de vencimento ");
+							String data = sc.next();
+							SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+							Date vencimento = sdf.parse(data);
+							if (conta.getCliente().getTipo() == conta.getCliente().getTipo().Comum) {
+								credito = new CartaoCredito(senha, 2000, vencimento);
+							} else if (conta.getCliente().getTipo() == conta.getCliente().getTipo().Premium) {
+								credito = new CartaoCredito(senha, 5000, vencimento);
+							} else if (conta.getCliente().getTipo() == conta.getCliente().getTipo().Super) {
+								credito = new CartaoCredito(senha, 1200.5, vencimento);
+							}
+							System.out.println("Cartão expedido \nNúmero " + credito.getNumero() + "\nBandeira "
+									+ credito.getBandeira() + "\nLimite " + credito.getLimite() + "\nVencimento "
+									+ credito.getVencimento());
+							ContaBo contab = new ContaBo(conta);
+							contab.addCartao(credito);
+						} else if (opCartao == 2) {
+							System.out.println("Limite mensal ");
+							double limite = sc.nextDouble();
+							CartaoDebito debito = new CartaoDebito(senha1, limite);
+							System.out.println("Cartão expedido \nNúmero " + debito.getNumero() + "\nBandeira "
+									+ debito.getBandeira() + "\nLimite " + debito.getLimiteTransacao());
+							ContaBo contab = new ContaBo(conta);
+							contab.addCartao(debito);
+						} else {
+							System.out.println("Opção invalida");
+						}
+
+					} else if (opc == 7) {
 						break;
-					} else {
+					}else if (opc == 8) {
+						System.out.println("Informe o número do cartão ");
+						String num = sc.next();
+						ContaBo contab = new ContaBo(conta);
+						contab.removerCartao(num);
+						
+					}else if (opc == 9) {
+						break;
+					}
+					else {
 						System.out.println("Opção invalida!");
 					}
 				}
@@ -157,8 +205,6 @@ public class Application {
 		}
 		sc.close();
 	}
-	
-	
 
 	public static Cliente cadastrarCliente(Scanner sc) {
 		ClienteBo clienteB = new ClienteBo();

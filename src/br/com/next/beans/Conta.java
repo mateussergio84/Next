@@ -1,6 +1,8 @@
 package br.com.next.beans;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Conta {
 	// private Cliente cliente;
@@ -12,6 +14,17 @@ public class Conta {
 	private Pix pix;
 	private TipoConta tipoConta;
 	private Date data;
+	private List<Cartao>cartoes;
+	
+	
+
+	public List<Cartao> getCartoes() {
+		return cartoes;
+	}
+
+	public void setCartoes(List<Cartao> cartoes) {
+		this.cartoes = cartoes;
+	}
 
 	public Pix getPix() {
 		return pix;
@@ -75,6 +88,29 @@ public class Conta {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	
+	public void addCartao(Cartao cartao) {
+		if(this.cartoes == null) {
+			this.cartoes = new ArrayList<Cartao>();
+		}
+			this.cartoes.add(cartao);
+			for(Cartao c: cartoes) {
+				System.out.println(c.getNumero());
+			}
+	}
+
+	public void removeCartao(String num) {
+		for(Cartao c : cartoes ) {
+			if(c.getNumero() == num) {
+				this.cartoes.remove(c);
+				break;
+			}else {
+				System.out.println("Cartao não encontrado!");
+			}
+		}for(Cartao c: cartoes) {
+			System.out.println(c.getNumero());
+		}
 	}
 
 }
