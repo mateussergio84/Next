@@ -124,10 +124,21 @@ public class ContaBo {
 		Dados.insereConta(this.conta.getNumeroConta(), conta);
 	}
 
-	public void removerCartao(String num) {
-		conta.removeCartao(num);
+	public void removerCartao(String num, String senha) {
+		conta.removeCartao(num, senha);
 		Dados.insereConta(this.conta.getNumeroConta(), conta);		
 	}
+	
+	
+	
+	public void verificaCartao(String num) {
+		conta.verificaCartao(num);
+		if(conta.isCred()== true) {
+			System.out.println("ABC");
+		}else {
+			System.out.println("DFG");
+		}
+	} 
 	
 
 

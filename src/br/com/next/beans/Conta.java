@@ -15,8 +15,17 @@ public class Conta {
 	private TipoConta tipoConta;
 	private Date data;
 	private List<Cartao>cartoes;
+	private boolean Cred = false;
 	
 	
+	
+	public boolean isCred() {
+		return Cred;
+	}
+
+	public void setCred(boolean cred) {
+		Cred = cred;
+	}
 
 	public List<Cartao> getCartoes() {
 		return cartoes;
@@ -100,11 +109,10 @@ public class Conta {
 			}
 	}
 
-	public void removeCartao(String num) {
+	public void removeCartao(String num, String senha) {
 		for(Cartao c : cartoes ) {
-			if(c.getNumero() == num) {
+			if(c.getNumero().equals(num)) {
 				this.cartoes.remove(c);
-				break;
 			}else {
 				System.out.println("Cartao não encontrado!");
 			}
@@ -112,5 +120,19 @@ public class Conta {
 			System.out.println(c.getNumero());
 		}
 	}
+	
+	public void verificaCartao(String num) {
+		for(Cartao c : cartoes ) {
+			if(c.getNumero().equals(num)) {
+				if(c.getClass().getSimpleName().toLowerCase().contains("debito")) {
+					this.Cred = true;
+				}
+			}else {
+				this.Cred = false;
+			}
+		}
+	}
+	
+	
 
 }

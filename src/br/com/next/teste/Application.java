@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import br.com.next.beans.Cartao;
 import br.com.next.beans.CartaoCredito;
 import br.com.next.beans.CartaoDebito;
 import br.com.next.beans.Cliente;
@@ -82,7 +83,9 @@ public class Application {
 				int opc = 9;
 				while (opc != 0) {
 					System.out.println("------------Menu------------"
-							+ "\n1 - Deposito\n2 - Transferencia \n3 - Consulta \n4 - Cadastrar chave PIX \n5 - Transferencia Pix \n6 - Sair \n----------------------------");
+							+ "\n1 - Deposito\n2 - Transferencia \n3 - Consulta \n4 - Cadastrar chave PIX "
+							+ "\n5 - Transferencia Pix \n6 - Solicitar cartão \n7 - Bloquear cartão"
+							+ "\n----------------------------");
 					opc = sc.nextInt();
 					if (opc == 1) {
 						System.out.println("Qual o valor R$");
@@ -170,6 +173,9 @@ public class Application {
 									+ credito.getVencimento());
 							ContaBo contab = new ContaBo(conta);
 							contab.addCartao(credito);
+							contab.verificaCartao(credito.getNumero());
+							System.out.println(conta.isCred());
+							
 						} else if (opCartao == 2) {
 							System.out.println("Limite mensal ");
 							double limite = sc.nextDouble();
@@ -178,17 +184,28 @@ public class Application {
 									+ debito.getBandeira() + "\nLimite " + debito.getLimiteTransacao());
 							ContaBo contab = new ContaBo(conta);
 							contab.addCartao(debito);
+							contab.verificaCartao(debito.getNumero());
+							System.out.println(conta.isCred());
 						} else {
 							System.out.println("Opção invalida");
 						}
 
 					} else if (opc == 7) {
-						break;
-					}else if (opc == 8) {
-						System.out.println("Informe o número do cartão ");
-						String num = sc.next();
+						System.out.println("Número do cartão ");
+						String numCartao = sc.next();
+						System.out.println("Senha ");
+						String senha2 = sc.next();
 						ContaBo contab = new ContaBo(conta);
-						contab.removerCartao(num);
+						contab.removerCartao(numCartao, senha2);
+						
+					}else if (opc == 8) {
+						System.out.println("Número do cartão ");
+						String numCartao = sc.next();
+						ContaBo contab = new ContaBo(conta);
+						contab.verificaCartao(numCartao);
+						//System.out.println(conta.isCred());
+		
+
 						
 					}else if (opc == 9) {
 						break;

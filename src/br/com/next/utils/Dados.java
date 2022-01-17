@@ -35,6 +35,36 @@ public class Dados {
 			return conta;
 		}
 	}
+	
+	public static Conta buscaContaPor(String num) {
+		Conta conta = Dados.banco_dados.get(num);
+		if (conta == null) {
+			System.out.println("Conta invalida!");
+			return null;
+		} else {
+			return conta;
+		}
+	}
+	
+	public static boolean valida(String num) {
+		Conta conta = Dados.banco_dados.get(num);
+		List<Cartao> listaCartao = conta.getCartoes();
+		for(Cartao c : listaCartao) {
+			if(c.getNumero().equals(num)) {
+				if(c.getClass().getSimpleName().toLowerCase().contains("debito")) {
+					System.out.println("Debito");
+					return true;
+				}
+			}else {
+				System.out.println("Credito");
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	
+	
 
 	public static List<Conta> buscarTodasAsContas(String cpf) {
 		List<Conta> listConta = new ArrayList<Conta>();
