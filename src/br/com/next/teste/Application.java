@@ -15,6 +15,7 @@ import br.com.next.beans.Conta;
 import br.com.next.beans.Endereco;
 import br.com.next.beans.Pix;
 import br.com.next.beans.TipoChavePix;
+import br.com.next.beans.TipoCliente;
 import br.com.next.beans.TipoConta;
 import br.com.next.bo.ClienteBo;
 import br.com.next.bo.ContaBo;
@@ -22,7 +23,7 @@ import br.com.next.utils.Dados;
 
 public class Application {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 
 		int opcao = 5;
@@ -84,7 +85,8 @@ public class Application {
 				while (opc != 0) {
 					System.out.println("------------Menu------------"
 							+ "\n1 - Deposito\n2 - Transferencia \n3 - Consulta \n4 - Cadastrar chave PIX "
-							+ "\n5 - Transferencia Pix \n6 - Solicitar cartão \n7 - Bloquear cartão"
+							+ "\n5 - Transferencia Pix \n6 - Solicitar cartão \n7 - Bloquear cartão \n8 - Pagar com Cartão \n9 - Fatura Cartão de Credito"
+							+ "\n10 - Sair"
 							+ "\n----------------------------");
 					opc = sc.nextInt();
 					if (opc == 1) {
@@ -157,24 +159,27 @@ public class Application {
 						String senha1 = sc.next();
 						if (opCartao == 1) {
 							CartaoCredito credito = new CartaoCredito();
-							System.out.println("Data de vencimento ");
-							String data = sc.next();
-							SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-							Date vencimento = sdf.parse(data);
-							if (conta.getCliente().getTipo() == conta.getCliente().getTipo().Comum) {
-								credito = new CartaoCredito(senha, 2000, vencimento);
-							} else if (conta.getCliente().getTipo() == conta.getCliente().getTipo().Premium) {
-								credito = new CartaoCredito(senha, 5000, vencimento);
-							} else if (conta.getCliente().getTipo() == conta.getCliente().getTipo().Super) {
-								credito = new CartaoCredito(senha, 1200.5, vencimento);
+							try {
+								System.out.println("Data de vencimento ");
+								String data = sc.next();
+								SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+								Date vencimento = sdf.parse(data);
+								conta.getCliente().getTipo();
+								if (conta.getCliente().getTipo() == TipoCliente.Comum) {
+									credito = new CartaoCredito(senha, 2000, vencimento);
+								} else if (conta.getCliente().getTipo() == TipoCliente.Premium) {
+									credito = new CartaoCredito(senha, 5000, vencimento);
+								} else if (conta.getCliente().getTipo() == TipoCliente.Super) {
+									credito = new CartaoCredito(senha, 1200.5, vencimento);
+								}
+								System.out.println("Cartão expedido \nNúmero " + credito.getNumero() + "\nBandeira "
+										+ credito.getBandeira() + "\nLimite " + credito.getLimite() + "\nVencimento "
+										+ credito.getVencimento());
+								ContaBo contab = new ContaBo(conta);
+								contab.addCartao(credito);
+							} catch (ParseException e) {
+								System.out.println("Data invalida!");
 							}
-							System.out.println("Cartão expedido \nNúmero " + credito.getNumero() + "\nBandeira "
-									+ credito.getBandeira() + "\nLimite " + credito.getLimite() + "\nVencimento "
-									+ credito.getVencimento());
-							ContaBo contab = new ContaBo(conta);
-							contab.addCartao(credito);
-							contab.verificaCartao(credito.getNumero());
-							System.out.println(conta.isCred());
 
 						} else if (opCartao == 2) {
 							System.out.println("Limite mensal ");
@@ -184,8 +189,6 @@ public class Application {
 									+ debito.getBandeira() + "\nLimite " + debito.getLimiteTransacao());
 							ContaBo contab = new ContaBo(conta);
 							contab.addCartao(debito);
-							contab.verificaCartao(debito.getNumero());
-							System.out.println(conta.isCred());
 						} else {
 							System.out.println("Opção invalida");
 						}
@@ -248,6 +251,7 @@ public class Application {
 						}
 
 					} else if (opc == 10) {
+						break;
 
 					} else {
 						System.out.println("Opção invalida!");

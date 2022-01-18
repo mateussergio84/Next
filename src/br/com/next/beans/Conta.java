@@ -16,18 +16,6 @@ public class Conta {
 	private Date data;
 	private ArrayList<Cartao>cartoes = new ArrayList<Cartao>();
 
-	private boolean Cred = false;
-
-
-	public boolean isCred() {
-		return Cred;
-	}
-
-	public void setCred(boolean cred) {
-		Cred = cred;
-	}
-
-	
 
 	public ArrayList<Cartao> getCartoes() {
 		return cartoes;
@@ -124,25 +112,5 @@ public class Conta {
 		}
 	}
 
-	public void verificaCartao(String num) {
-		for (Cartao c : cartoes) {
-			if (c.getNumero().equals(num)) {
-				if (c.getClass().getSimpleName().toLowerCase().contains("debito")) {
-					this.Cred = true;
-				}
-			} else {
-				this.Cred = false;
-			}
-		}
-	}
-
-	public boolean verifica(String num) {
-		for (Cartao c : cartoes) {
-			if (c.getClass().getSimpleName().toLowerCase().contains("debito")) {
-				return Cred = true;
-			}
-		}
-		return Cred = false;
-	}
 
 }

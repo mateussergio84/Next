@@ -133,14 +133,6 @@ public class ContaBo {
 		Dados.insereConta(this.conta.getNumeroConta(), conta);		
 	}
 	
-	
-	
-
-	
-
-	public void verificaCartao(String num) {
-		conta.verificaCartao(num);
-	}
 
 	public void comparDebito(Cartao c, double valor) {
 		CartaoDebito cartaoD = (CartaoDebito)c;
