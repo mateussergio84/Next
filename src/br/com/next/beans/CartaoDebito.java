@@ -19,6 +19,14 @@ public class CartaoDebito extends Cartao {
 		this.limiteTransacao = limiteTransacao;
 	}
 
+	@Override
+	public String toString() {
+		return "CartaoDebito [limiteTransacao=" + limiteTransacao + ", getLimiteTransacao()=" + getLimiteTransacao()
+				+ ", getNumero()=" + getNumero() + ", getBandeira()=" + getBandeira() + ", getSenha()=" + getSenha()
+				+ ", isAtivo()=" + isAtivo() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
+	}
+
 	
 	
 	

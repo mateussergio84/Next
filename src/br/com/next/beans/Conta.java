@@ -14,11 +14,11 @@ public class Conta {
 	private Pix pix;
 	private TipoConta tipoConta;
 	private Date data;
-	private List<Cartao>cartoes;
+	private ArrayList<Cartao>cartoes = new ArrayList<Cartao>();
+
 	private boolean Cred = false;
-	
-	
-	
+
+
 	public boolean isCred() {
 		return Cred;
 	}
@@ -27,11 +27,13 @@ public class Conta {
 		Cred = cred;
 	}
 
-	public List<Cartao> getCartoes() {
+	
+
+	public ArrayList<Cartao> getCartoes() {
 		return cartoes;
 	}
 
-	public void setCartoes(List<Cartao> cartoes) {
+	public void setCartoes(ArrayList<Cartao> cartoes) {
 		this.cartoes = cartoes;
 	}
 
@@ -98,41 +100,49 @@ public class Conta {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
+
 	public void addCartao(Cartao cartao) {
-		if(this.cartoes == null) {
+		if (this.cartoes == null) {
 			this.cartoes = new ArrayList<Cartao>();
 		}
-			this.cartoes.add(cartao);
-			for(Cartao c: cartoes) {
-				System.out.println(c.getNumero());
-			}
-	}
-
-	public void removeCartao(String num, String senha) {
-		for(Cartao c : cartoes ) {
-			if(c.getNumero().equals(num)) {
-				this.cartoes.remove(c);
-			}else {
-				System.out.println("Cartao não encontrado!");
-			}
-		}for(Cartao c: cartoes) {
+		this.cartoes.add(cartao);
+		for (Cartao c : cartoes) {
 			System.out.println(c.getNumero());
 		}
 	}
-	
+
+	public void removeCartao(String num, String senha) {
+		for (Cartao c : cartoes) {
+			if (c.getNumero().equals(num)) {
+				this.cartoes.remove(c);
+			} else {
+				System.out.println("Cartao não encontrado!");
+			}
+		}
+		for (Cartao c : cartoes) {
+			System.out.println(c.getNumero());
+		}
+	}
+
 	public void verificaCartao(String num) {
-		for(Cartao c : cartoes ) {
-			if(c.getNumero().equals(num)) {
-				if(c.getClass().getSimpleName().toLowerCase().contains("debito")) {
+		for (Cartao c : cartoes) {
+			if (c.getNumero().equals(num)) {
+				if (c.getClass().getSimpleName().toLowerCase().contains("debito")) {
 					this.Cred = true;
 				}
-			}else {
+			} else {
 				this.Cred = false;
 			}
 		}
 	}
-	
-	
+
+	public boolean verifica(String num) {
+		for (Cartao c : cartoes) {
+			if (c.getClass().getSimpleName().toLowerCase().contains("debito")) {
+				return Cred = true;
+			}
+		}
+		return Cred = false;
+	}
 
 }

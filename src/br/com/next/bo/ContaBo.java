@@ -1,12 +1,16 @@
 package br.com.next.bo;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import br.com.next.beans.Cartao;
+import br.com.next.beans.CartaoCredito;
 import br.com.next.beans.CartaoDebito;
 import br.com.next.beans.Cliente;
+import br.com.next.beans.Compra;
 import br.com.next.beans.Conta;
 import br.com.next.beans.TipoCliente;
 import br.com.next.beans.TipoConta;
@@ -131,14 +135,59 @@ public class ContaBo {
 	
 	
 	
+
+	
+
 	public void verificaCartao(String num) {
 		conta.verificaCartao(num);
-		if(conta.isCred()== true) {
-			System.out.println("ABC");
-		}else {
-			System.out.println("DFG");
+	}
+
+	public void comparDebito(Cartao c, double valor) {
+		CartaoDebito cartaoD = (CartaoDebito)c;
+		if(cartaoD.getLimiteTransacao()>valor) {
+			if(conta.getSaldo()>valor) {
+				conta.setSaldo(conta.getSaldo()-valor);
+				System.out.println("Compra aprovada!\nSaldo R$"+conta.getSaldo());
+			}else {
+				System.out.println("Saldo insuficiente");
+			}
 		}
-	} 
+
+	}
+
+	public void comparCredito(Cartao c, double valor) {
+		CartaoCredito cartaoC = (CartaoCredito)c;
+		if(cartaoC.getLimite()>valor) {
+			cartaoC.setValorFatura(cartaoC.getValorFatura()+valor);
+			cartaoC.setLimite(cartaoC.getLimite()-valor);
+			Compra compra = new Compra(new Date(), valor);
+			cartaoC.setCompras(compra);
+			System.out.println("Compra aprovada!\nLimite disponivel R$"+cartaoC.getLimite());
+			
+		}
+		
+	}
+
+	public void exibeFatura(Cartao c) {
+		CartaoCredito cartaoC = (CartaoCredito)c;
+		List<Compra>compras = cartaoC.getCompras();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		for(Compra compra : compras) {	
+			String dataCompra = sdf.format(compra.getDate());
+
+			System.out.println("Compra no valor de R$"+compra.getValor()+" na data de "+dataCompra);
+		}
+		String dataVencimento = sdf.format(cartaoC.getVencimento());
+		System.out.println("Total R$"+cartaoC.getValorFatura());
+		System.out.println("Vencimento "+dataVencimento);
+		System.out.println("Limite R$"+cartaoC.getLimite());
+		
+	}
+	
+	
+
+	
+	
 	
 
 

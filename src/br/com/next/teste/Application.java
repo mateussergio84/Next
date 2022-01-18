@@ -175,7 +175,7 @@ public class Application {
 							contab.addCartao(credito);
 							contab.verificaCartao(credito.getNumero());
 							System.out.println(conta.isCred());
-							
+
 						} else if (opCartao == 2) {
 							System.out.println("Limite mensal ");
 							double limite = sc.nextDouble();
@@ -197,20 +197,59 @@ public class Application {
 						String senha2 = sc.next();
 						ContaBo contab = new ContaBo(conta);
 						contab.removerCartao(numCartao, senha2);
-						
-					}else if (opc == 8) {
+
+					} else if (opc == 8) {
+						System.out.println("1 - Debito\n2 - Credito");
+						int opcaoCompra = sc.nextInt();
+						if (opcaoCompra == 1) {
+							System.out.println("Número do cartão ");
+							String numCartao = sc.next();
+							ContaBo contab = new ContaBo(conta);
+							for (Cartao c : conta.getCartoes()) {
+								if (c.getNumero().equals(numCartao)) {
+									if (c.getClass().getSimpleName().toLowerCase().contains("debito")) {
+										System.out.println("Valor da compra ");
+										double valor = sc.nextDouble();
+										contaB.comparDebito(c, valor);
+									}
+								} else {
+									System.out.println("Cartão não encontrado!");
+								}
+							}
+						} else if (opcaoCompra == 2) {
+							System.out.println("Número do cartão ");
+							String numCartao = sc.next();
+							ContaBo contab = new ContaBo(conta);
+							for (Cartao c : conta.getCartoes()) {
+								if (c.getNumero().equals(numCartao)) {
+									if (c.getClass().getSimpleName().toLowerCase().contains("credito")) {
+										System.out.println("Valor da compra ");
+										double valor = sc.nextDouble();
+										contaB.comparCredito(c, valor);
+									}
+								} else {
+									System.out.println("Cartão não encontrado!");
+								}
+							}
+
+						}
+
+					} else if (opc == 9) {
 						System.out.println("Número do cartão ");
 						String numCartao = sc.next();
-						ContaBo contab = new ContaBo(conta);
-						contab.verificaCartao(numCartao);
-						//System.out.println(conta.isCred());
-		
+						for (Cartao c : conta.getCartoes()) {
+							if (c.getNumero().equals(numCartao)) {
+								if (c.getClass().getSimpleName().toLowerCase().contains("credito")) {
+									contaB.exibeFatura(c);
+								}
+							} else {
+								System.out.println("Cartão não encontrado!");
+							}
+						}
 
-						
-					}else if (opc == 9) {
-						break;
-					}
-					else {
+					} else if (opc == 10) {
+
+					} else {
 						System.out.println("Opção invalida!");
 					}
 				}

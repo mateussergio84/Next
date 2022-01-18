@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.next.beans.Cartao;
+import br.com.next.beans.CartaoCredito;
 import br.com.next.beans.Conta;
 import br.com.next.beans.Pix;
 
 public class Dados {
 
 	public static Map<String, Conta> banco_dados = new HashMap<String, Conta>();
+
 
 
 	public static Conta buscaConta(String numeroConta) {
@@ -36,6 +38,7 @@ public class Dados {
 		}
 	}
 	
+
 	public static Conta buscaContaPor(String num) {
 		Conta conta = Dados.banco_dados.get(num);
 		if (conta == null) {
@@ -80,6 +83,8 @@ public class Dados {
 	public static void insereConta(String numeroConta, Conta conta) {
 		Dados.banco_dados.put(numeroConta, conta);
 	}
+	
+	
 
 	public static List<Conta> buscarTodasAsContas() {
 		List<Conta> listConta = new ArrayList<Conta>();
