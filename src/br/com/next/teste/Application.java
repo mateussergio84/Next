@@ -11,6 +11,7 @@ import br.com.next.beans.Cartao;
 import br.com.next.beans.CartaoCredito;
 import br.com.next.beans.CartaoDebito;
 import br.com.next.beans.Cliente;
+import br.com.next.beans.Compra;
 import br.com.next.beans.Conta;
 import br.com.next.beans.Endereco;
 import br.com.next.beans.Pix;
@@ -86,8 +87,7 @@ public class Application {
 					System.out.println("------------Menu------------"
 							+ "\n1 - Deposito\n2 - Transferencia \n3 - Consulta \n4 - Cadastrar chave PIX "
 							+ "\n5 - Transferencia Pix \n6 - Solicitar cartão \n7 - Bloquear cartão \n8 - Pagar com Cartão \n9 - Fatura Cartão de Credito"
-							+ "\n10 - Sair"
-							+ "\n----------------------------");
+							+ "\n10 - Sair" + "\n----------------------------");
 					opc = sc.nextInt();
 					if (opc == 1) {
 						System.out.println("Qual o valor R$");
@@ -104,8 +104,14 @@ public class Application {
 						System.out.println("Informe o valor ");
 						Double valor = sc.nextDouble();
 						contaB.transferir(contaRecebe, valor);
+						if (contaB.transferir(contaRecebe, valor) == false) {
+							System.out.println("Valor insuficinete");
+						} else {
+							System.out.println(
+									"Transferido com sucesso \n" + "R$" + valor + " Para conta " + numContaRecebe);
+						}
 					} else if (opc == 3) {
-						contaB.exibeSaldo();
+						contaB.exibeSaldo(); 
 					} else if (opc == 4) {
 						System.out.println(
 								"Qual o tipo de pix \n1 para cpf \n2 email \n3 para telefone \n4 para aleatorio");
@@ -166,11 +172,11 @@ public class Application {
 								Date vencimento = sdf.parse(data);
 								conta.getCliente().getTipo();
 								if (conta.getCliente().getTipo() == TipoCliente.Comum) {
-									credito = new CartaoCredito(senha, 2000, vencimento);
+									credito = new CartaoCredito(senha, 1000, vencimento);
 								} else if (conta.getCliente().getTipo() == TipoCliente.Premium) {
 									credito = new CartaoCredito(senha, 5000, vencimento);
 								} else if (conta.getCliente().getTipo() == TipoCliente.Super) {
-									credito = new CartaoCredito(senha, 1200.5, vencimento);
+									credito = new CartaoCredito(senha, 1000.5, vencimento);
 								}
 								System.out.println("Cartão expedido \nNúmero " + credito.getNumero() + "\nBandeira "
 										+ credito.getBandeira() + "\nLimite " + credito.getLimite() + "\nVencimento "
@@ -207,13 +213,18 @@ public class Application {
 						if (opcaoCompra == 1) {
 							System.out.println("Número do cartão ");
 							String numCartao = sc.next();
-							ContaBo contab = new ContaBo(conta);
 							for (Cartao c : conta.getCartoes()) {
 								if (c.getNumero().equals(numCartao)) {
 									if (c.getClass().getSimpleName().toLowerCase().contains("debito")) {
 										System.out.println("Valor da compra ");
 										double valor = sc.nextDouble();
-										contaB.comparDebito(c, valor);
+										//contaB.comparDebito(c, valor);
+										if(contaB.comparAprovadaDebito(c, valor) == true) {
+											System.out.println("Compra aprovada\n");
+											contaB.exibeSaldo();
+										}else {
+											System.out.println("Saldo insuficiente");
+										}
 									}
 								} else {
 									System.out.println("Cartão não encontrado!");
@@ -222,13 +233,17 @@ public class Application {
 						} else if (opcaoCompra == 2) {
 							System.out.println("Número do cartão ");
 							String numCartao = sc.next();
-							ContaBo contab = new ContaBo(conta);
 							for (Cartao c : conta.getCartoes()) {
 								if (c.getNumero().equals(numCartao)) {
 									if (c.getClass().getSimpleName().toLowerCase().contains("credito")) {
 										System.out.println("Valor da compra ");
 										double valor = sc.nextDouble();
-										contaB.comparCredito(c, valor);
+										CartaoCredito cd = (CartaoCredito)c;
+										if (contaB.compraAprovadaCredito(c, valor) == true) {
+											System.out.println("Compra aprovada!\nLimite disponivel R$" + cd.getLimite());
+										} else {
+											System.out.println("Compra não autorizada, excede seu limite ");
+										}
 									}
 								} else {
 									System.out.println("Cartão não encontrado!");
@@ -243,7 +258,19 @@ public class Application {
 						for (Cartao c : conta.getCartoes()) {
 							if (c.getNumero().equals(numCartao)) {
 								if (c.getClass().getSimpleName().toLowerCase().contains("credito")) {
-									contaB.exibeFatura(c);
+									CartaoCredito cartaoC = (CartaoCredito) c;
+									// contaB.exibeFatura(c);
+									List<Compra> compras = cartaoC.getCompras();
+									SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+									for (Compra compra : compras) {
+										String dataCompra = sdf.format(compra.getDate());
+										System.out.println("Compra no valor de R$" + compra.getValor() + " na data de "
+												+ dataCompra);
+									}
+									String dataVencimento = sdf.format(cartaoC.getVencimento());
+									System.out.println("Total R$" + cartaoC.getValorFatura());
+									System.out.println("Vencimento " + dataVencimento);
+									System.out.println("Limite R$" + cartaoC.getLimite());
 								}
 							} else {
 								System.out.println("Cartão não encontrado!");

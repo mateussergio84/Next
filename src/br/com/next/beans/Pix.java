@@ -1,9 +1,12 @@
 package br.com.next.beans;
 
+import java.util.Date;
+
 public class Pix {
 	private TipoChavePix tipoChave;
 	private String chave;
 	private boolean ativo;
+	
 
 	public TipoChavePix getTipoChave() {
 		return tipoChave;

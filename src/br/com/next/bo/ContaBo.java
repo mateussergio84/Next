@@ -60,7 +60,6 @@ public class ContaBo {
 			this.exibeSaldo();
 			return true;
 		} else {
-			System.out.println("Saldo insuficiente!");
 			return false;
 		}
 	}
@@ -134,32 +133,38 @@ public class ContaBo {
 	}
 	
 
-	public void comparDebito(Cartao c, double valor) {
+	public boolean comparAprovadaDebito(Cartao c, double valor) {
 		CartaoDebito cartaoD = (CartaoDebito)c;
 		if(cartaoD.getLimiteTransacao()>valor) {
 			if(conta.getSaldo()>valor) {
 				conta.setSaldo(conta.getSaldo()-valor);
-				System.out.println("Compra aprovada!\nSaldo R$"+conta.getSaldo());
+				//System.out.println("Compra aprovada!\nSaldo R$"+conta.getSaldo());
+				return true;
 			}else {
 				System.out.println("Saldo insuficiente");
+				return false;
 			}
 		}
-
+		return false;
 	}
 
-	public void comparCredito(Cartao c, double valor) {
+	public boolean compraAprovadaCredito(Cartao c, double valor) {
 		CartaoCredito cartaoC = (CartaoCredito)c;
 		if(cartaoC.getLimite()>valor) {
 			cartaoC.setValorFatura(cartaoC.getValorFatura()+valor);
 			cartaoC.setLimite(cartaoC.getLimite()-valor);
 			Compra compra = new Compra(new Date(), valor);
 			cartaoC.setCompras(compra);
-			System.out.println("Compra aprovada!\nLimite disponivel R$"+cartaoC.getLimite());
-			
+			return true;
+			//System.out.println("Compra aprovada!\nLimite disponivel R$"+cartaoC.getLimite());
+			//System.out.println("Compra não autorizada, excede seu limite ");
+		}else{
+			return false;
 		}
 		
 	}
 
+	/*
 	public void exibeFatura(Cartao c) {
 		CartaoCredito cartaoC = (CartaoCredito)c;
 		List<Compra>compras = cartaoC.getCompras();
@@ -174,22 +179,7 @@ public class ContaBo {
 		System.out.println("Vencimento "+dataVencimento);
 		System.out.println("Limite R$"+cartaoC.getLimite());
 		
-	}
+	}*/
 	
 	
-
-	
-	
-	
-
-
-	
-	
-
-	/*
-	 * public void adicionarPix(Pix pix) { this.conta.setPix(pix);
-	 * Dados.insereConta(this.conta.getNumeroConta(), this.conta);
-	 * 
-	 * }
-	 */
 }
