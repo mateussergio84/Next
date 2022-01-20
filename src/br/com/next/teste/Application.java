@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import br.com.next.beans.Apolice;
 import br.com.next.beans.Cartao;
 import br.com.next.beans.CartaoCredito;
 import br.com.next.beans.CartaoDebito;
@@ -15,6 +16,7 @@ import br.com.next.beans.Compra;
 import br.com.next.beans.Conta;
 import br.com.next.beans.Endereco;
 import br.com.next.beans.Pix;
+import br.com.next.beans.Seguro;
 import br.com.next.beans.TipoChavePix;
 import br.com.next.beans.TipoCliente;
 import br.com.next.beans.TipoConta;
@@ -26,6 +28,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
+		//boolean isCred = false;
 
 		int opcao = 5;
 		System.out.println("Bem vido ao Next");
@@ -86,8 +89,8 @@ public class Application {
 				while (opc != 0) {
 					System.out.println("------------Menu------------"
 							+ "\n1 - Deposito\n2 - Transferencia \n3 - Consulta \n4 - Cadastrar chave PIX "
-							+ "\n5 - Transferencia Pix \n6 - Solicitar cartão \n7 - Bloquear cartão \n8 - Pagar com Cartão \n9 - Fatura Cartão de Credito"
-							+ "\n10 - Sair" + "\n----------------------------");
+							+ "\n5 - Transferencia Pix \n6 - Cartões" + "\n10 - Sair"
+							+ "\n----------------------------");
 					opc = sc.nextInt();
 					if (opc == 1) {
 						System.out.println("Qual o valor R$");
@@ -111,7 +114,7 @@ public class Application {
 									"Transferido com sucesso \n" + "R$" + valor + " Para conta " + numContaRecebe);
 						}
 					} else if (opc == 3) {
-						contaB.exibeSaldo(); 
+						contaB.exibeSaldo();
 					} else if (opc == 4) {
 						System.out.println(
 								"Qual o tipo de pix \n1 para cpf \n2 email \n3 para telefone \n4 para aleatorio");
@@ -158,128 +161,195 @@ public class Application {
 
 						contaB.transferir(contaRecebe, valor);
 					} else if (opc == 6) {
-						int opCartao;
-						System.out.println("1 para credito 2 para debito");
-						opCartao = sc.nextInt();
-						System.out.println("senha: ");
-						String senha1 = sc.next();
-						if (opCartao == 1) {
-							CartaoCredito credito = new CartaoCredito();
-							try {
-								System.out.println("Data de vencimento ");
-								String data = sc.next();
-								SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-								Date vencimento = sdf.parse(data);
-								conta.getCliente().getTipo();
-								if (conta.getCliente().getTipo() == TipoCliente.Comum) {
-									credito = new CartaoCredito(senha, 1000, vencimento);
-								} else if (conta.getCliente().getTipo() == TipoCliente.Premium) {
-									credito = new CartaoCredito(senha, 5000, vencimento);
-								} else if (conta.getCliente().getTipo() == TipoCliente.Super) {
-									credito = new CartaoCredito(senha, 1000.5, vencimento);
+						System.out.println("----------Cartões----------"
+								+ "\n1 - Solicitar cartão \n2 - Bloquear cartão \n3 - Pagar com Cartão \n4 - Fatura Cartão de Credito \n5 - Seguros \n---------------------------");
+						int opcC = sc.nextInt();
+						if (opcC == 1) {
+							int opCartao;
+							System.out.println("1 para credito 2 para debito");
+							opCartao = sc.nextInt();
+							System.out.println("senha: ");
+							String senha1 = sc.next();
+							if (opCartao == 1) {
+								CartaoCredito credito = new CartaoCredito();
+								try {
+									System.out.println("Data de vencimento ");
+									String data = sc.next();
+									SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+									Date vencimento = sdf.parse(data);
+									conta.getCliente().getTipo();
+									if (conta.getCliente().getTipo() == TipoCliente.Comum) {
+										credito = new CartaoCredito(senha, 1000, vencimento);
+									} else if (conta.getCliente().getTipo() == TipoCliente.Premium) {
+										credito = new CartaoCredito(senha, 5000, vencimento);
+									} else if (conta.getCliente().getTipo() == TipoCliente.Super) {
+										credito = new CartaoCredito(senha, 1000.5, vencimento);
+									}
+									System.out.println("Cartão expedido \nNúmero " + credito.getNumero() + "\nBandeira "
+											+ credito.getBandeira() + "\nLimite " + credito.getLimite()
+											+ "\nVencimento " + credito.getVencimento());
+									ContaBo contab = new ContaBo(conta);
+									contab.addCartao(credito);
+								} catch (ParseException e) {
+									System.out.println("Data invalida!");
 								}
-								System.out.println("Cartão expedido \nNúmero " + credito.getNumero() + "\nBandeira "
-										+ credito.getBandeira() + "\nLimite " + credito.getLimite() + "\nVencimento "
-										+ credito.getVencimento());
+
+							} else if (opCartao == 2) {
+								System.out.println("Limite mensal ");
+								double limite = sc.nextDouble();
+								CartaoDebito debito = new CartaoDebito(senha1, limite);
+								System.out.println("Cartão expedido \nNúmero " + debito.getNumero() + "\nBandeira "
+										+ debito.getBandeira() + "\nLimite " + debito.getLimiteTransacao());
 								ContaBo contab = new ContaBo(conta);
-								contab.addCartao(credito);
-							} catch (ParseException e) {
-								System.out.println("Data invalida!");
+								contab.addCartao(debito);
+							} else {
+								System.out.println("Opção invalida");
 							}
 
-						} else if (opCartao == 2) {
-							System.out.println("Limite mensal ");
-							double limite = sc.nextDouble();
-							CartaoDebito debito = new CartaoDebito(senha1, limite);
-							System.out.println("Cartão expedido \nNúmero " + debito.getNumero() + "\nBandeira "
-									+ debito.getBandeira() + "\nLimite " + debito.getLimiteTransacao());
-							ContaBo contab = new ContaBo(conta);
-							contab.addCartao(debito);
-						} else {
-							System.out.println("Opção invalida");
-						}
-
-					} else if (opc == 7) {
-						System.out.println("Número do cartão ");
-						String numCartao = sc.next();
-						System.out.println("Senha ");
-						String senha2 = sc.next();
-						ContaBo contab = new ContaBo(conta);
-						contab.removerCartao(numCartao, senha2);
-
-					} else if (opc == 8) {
-						System.out.println("1 - Debito\n2 - Credito");
-						int opcaoCompra = sc.nextInt();
-						if (opcaoCompra == 1) {
+						} else if (opcC == 2) {
 							System.out.println("Número do cartão ");
 							String numCartao = sc.next();
-							for (Cartao c : conta.getCartoes()) {
-								if (c.getNumero().equals(numCartao)) {
-									if (c.getClass().getSimpleName().toLowerCase().contains("debito")) {
-										System.out.println("Valor da compra ");
-										double valor = sc.nextDouble();
-										//contaB.comparDebito(c, valor);
-										if(contaB.comparAprovadaDebito(c, valor) == true) {
-											System.out.println("Compra aprovada\n");
-											contaB.exibeSaldo();
-										}else {
-											System.out.println("Saldo insuficiente");
+							System.out.println("Senha ");
+							String senha2 = sc.next();
+							ContaBo contab = new ContaBo(conta);
+							contab.removerCartao(numCartao, senha2);
+
+						} else if (opcC == 3) {
+							System.out.println("1 - Debito\n2 - Credito");
+							int opcaoCompra = sc.nextInt();
+							if (opcaoCompra == 1) {
+								System.out.println("Número do cartão ");
+								String numCartao = sc.next();
+								for (Cartao c : conta.getCartoes()) {
+									if (c.getNumero().equals(numCartao)) {
+										if (c.getClass().getSimpleName().toLowerCase().contains("debito")) {
+											System.out.println("Valor da compra ");
+											double valor = sc.nextDouble();
+											// contaB.comparDebito(c, valor);
+											if (contaB.comparAprovadaDebito(c, valor) == true) {
+												System.out.println("Compra aprovada\n");
+												contaB.exibeSaldo();
+											} else {
+												System.out.println("Saldo insuficiente");
+											}
 										}
+									} else {
+										System.out.println("Cartão não encontrado!");
 									}
-								} else {
-									System.out.println("Cartão não encontrado!");
+								}
+							} else if (opcaoCompra == 2) {
+								System.out.println("Número do cartão ");
+								String numCartao = sc.next();
+								Dados.isCred(numCartao, conta);
+								if(Dados.isCred(numCartao, conta)!=null) {
+									System.out.println("Valor da compra ");
+									double valor = sc.nextDouble();
+									CartaoCredito cd = (CartaoCredito) Dados.isCred(numCartao, conta);
+									if (contaB.compraAprovadaCredito(cd, valor) == true) {
+										System.out.println(
+												"Compra aprovada!\nLimite disponivel R$" + cd.getLimite());
+									} else {
+										System.out.println("Compra não autorizada, excede seu limite ");
+									}
+								}else {
+									System.out.println("error");
 								}
 							}
-						} else if (opcaoCompra == 2) {
+
+						} else if (opcC == 4) {
 							System.out.println("Número do cartão ");
 							String numCartao = sc.next();
 							for (Cartao c : conta.getCartoes()) {
 								if (c.getNumero().equals(numCartao)) {
 									if (c.getClass().getSimpleName().toLowerCase().contains("credito")) {
-										System.out.println("Valor da compra ");
-										double valor = sc.nextDouble();
-										CartaoCredito cd = (CartaoCredito)c;
-										if (contaB.compraAprovadaCredito(c, valor) == true) {
-											System.out.println("Compra aprovada!\nLimite disponivel R$" + cd.getLimite());
-										} else {
-											System.out.println("Compra não autorizada, excede seu limite ");
+										CartaoCredito cartaoC = (CartaoCredito) c;
+										// contaB.exibeFatura(c);
+										List<Compra> compras = cartaoC.getCompras();
+										SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+										for (Compra compra : compras) {
+											String dataCompra = sdf.format(compra.getDate());
+											System.out.println("Compra no valor de R$" + compra.getValor()
+													+ " na data de " + dataCompra);
 										}
+										String dataVencimento = sdf.format(cartaoC.getVencimento());
+										System.out.println("Total R$" + cartaoC.getValorFatura());
+										System.out.println("Vencimento " + dataVencimento);
+										System.out.println("Limite R$" + cartaoC.getLimite());
 									}
 								} else {
 									System.out.println("Cartão não encontrado!");
 								}
 							}
 
-						}
-
-					} else if (opc == 9) {
-						System.out.println("Número do cartão ");
-						String numCartao = sc.next();
-						for (Cartao c : conta.getCartoes()) {
-							if (c.getNumero().equals(numCartao)) {
-								if (c.getClass().getSimpleName().toLowerCase().contains("credito")) {
-									CartaoCredito cartaoC = (CartaoCredito) c;
-									// contaB.exibeFatura(c);
-									List<Compra> compras = cartaoC.getCompras();
-									SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-									for (Compra compra : compras) {
-										String dataCompra = sdf.format(compra.getDate());
-										System.out.println("Compra no valor de R$" + compra.getValor() + " na data de "
-												+ dataCompra);
+						} else if (opcC == 5) {
+							System.out.println("Informe número do cartão");
+							String numCartao = sc.next();
+							if (Dados.isCred(numCartao, conta) != null) {
+								CartaoCredito CC = (CartaoCredito) Dados.isCred(numCartao, conta);
+								Dados.carregaSeguros();
+								System.out.println("Deseja ver os seguros disponiveis, digite 1 para sim 2 para não");
+								int lS = sc.nextInt();
+								if (lS == 1) {
+									for (Seguro s : Dados.lSeguros) {
+										System.out.println("Opção " + s.getId() + ":\nSeguro de " + s.getNome() + "\n"
+												+ s.getRegras());
+										System.out.println("\n------------------------\n");
 									}
-									String dataVencimento = sdf.format(cartaoC.getVencimento());
-									System.out.println("Total R$" + cartaoC.getValorFatura());
-									System.out.println("Vencimento " + dataVencimento);
-									System.out.println("Limite R$" + cartaoC.getLimite());
+									System.out.println("Digite: \n1 - para Seguro de Invalidez"
+											+ "\n2 - para seguro de morte \n3 - para seguro desemprego \n4 - para Sair");
+									int opS = sc.nextInt();
+									if (opS == 1) {
+										Seguro seguro = Dados.addSeguroMorte();
+										Double valorApolice = 36.0;
+										String descricaoCondicao = "Seguro: " + seguro.getNome() + "\nRegras: \n"
+												+ seguro.getRegras()
+												+ "Todos os nossos seguros garantem recuperação de 100% do valor investido pelo\r\n"
+												+ "segurado.\r\n"
+												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
+										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
+										CC.setApolice(apolice);
+										System.out.println(CC.toString());
+										System.out.println("\nContrato de seguro de " + seguro.getNome()
+												+ " contratado na data " + apolice.getDataAssinatura() + ""
+												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
+												+ " validas apartir da data " + apolice.getDataCarrencia());
+									} else if (opS == 2) {
+										Seguro seguro = Dados.addSeguroInvalidez();
+										Double valorApolice = 36.0;
+										String descricaoCondicao = "Seguro: " + seguro.getNome() + "\nRegras: \n"
+												+ seguro.getRegras()
+												+ "Todos os nossos seguros garantem recuperação de 100% do valor investido pelo\r\n"
+												+ "segurado.\r\n"
+												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
+										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
+										System.out.println("\nContrato de seguro de " + seguro.getNome()
+												+ " contratado na data " + apolice.getDataAssinatura() + ""
+												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
+												+ " validas apartir da data " + apolice.getDataCarrencia());
+									} else if (opS == 3) {
+										Seguro seguro = Dados.addSeguroDesemprego();
+										Double valorApolice = 36.0;
+										String descricaoCondicao = "Seguro: " + seguro.getNome() + "\nRegras: \n"
+												+ seguro.getRegras()
+												+ "Todos os nossos seguros garantem recuperação de 100% do valor investido pelo\r\n"
+												+ "segurado.\r\n"
+												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
+										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
+										System.out.println("\nContrato de seguro de " + seguro.getNome()
+												+ " contratado na data " + apolice.getDataAssinatura() + ""
+												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
+												+ " validas apartir da data " + apolice.getDataCarrencia());
+									}
 								}
+
 							} else {
-								System.out.println("Cartão não encontrado!");
+								System.out.println("Indisponivel");
 							}
+
 						}
 
 					} else if (opc == 10) {
 						break;
-
 					} else {
 						System.out.println("Opção invalida!");
 					}

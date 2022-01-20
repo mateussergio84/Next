@@ -10,6 +10,7 @@ public class CartaoCredito extends Cartao {
 	private double valorFatura;
 	private Date vencimento;
 	private List<Compra>compras;
+	Apolice apolice;
 	
 
 	
@@ -23,10 +24,19 @@ public class CartaoCredito extends Cartao {
 		this.valorFatura = 0;
 		this.compras = new ArrayList<Compra>();
 		this.vencimento = vencimento;
+	}	
+
+	public Apolice getApolice() {
+		return apolice;
 	}
-	
-	
-	
+
+	public void setApolice(Apolice apolice) {
+		this.apolice = apolice;
+	}
+
+	public void setCompras(List<Compra> compras) {
+		this.compras = compras;
+	}
 
 	public List<Compra> getCompras() {
 		return compras;
@@ -68,6 +78,14 @@ public class CartaoCredito extends Cartao {
 
 	public void setVencimento(Date vencimento) {
 		this.vencimento = vencimento;
+	}
+
+	@Override
+	public String toString() {
+		return "CartaoCredito [id=" + id + ", limite=" + limite + ", valorFatura=" + valorFatura + ", vencimento="
+				+ vencimento + ", compras=" + compras + ", apolice=" + apolice + ", getApolice()=" + getApolice()
+				+ ", getCompras()=" + getCompras() + ", getId()=" + getId() + ", getLimite()=" + getLimite()
+				+ ", getValorFatura()=" + getValorFatura() + ", getVencimento()=" + getVencimento() + "]";
 	}
 	
 	

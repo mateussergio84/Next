@@ -1,16 +1,23 @@
 package br.com.next.beans;
 
 public class Seguro {
-	private int String;
+	public Seguro(int id, String nome, String regras) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.regras = regras;
+	}
+
+	private int id;
 	private String nome;
 	private String regras;
 
-	public int getString() {
-		return String;
+	public int getId() {
+		return id;
 	}
 
-	public void setString(int string) {
-		String = string;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNome() {
