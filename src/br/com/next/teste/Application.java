@@ -28,7 +28,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		//boolean isCred = false;
+		// boolean isCred = false;
 
 		int opcao = 5;
 		System.out.println("Bem vido ao Next");
@@ -162,7 +162,7 @@ public class Application {
 						contaB.transferir(contaRecebe, valor);
 					} else if (opc == 6) {
 						System.out.println("----------Cartões----------"
-								+ "\n1 - Solicitar cartão \n2 - Bloquear cartão \n3 - Pagar com Cartão \n4 - Fatura Cartão de Credito \n5 - Seguros \n---------------------------");
+								+ "\n1 - Solicitar cartão \n2 - Bloquear cartão \n3 - Pagar com Cartão \n4 - Fatura Cartão de Credito \n5 - Seguros \n6 recuperar seguro \n---------------------------");
 						int opcC = sc.nextInt();
 						if (opcC == 1) {
 							int opCartao;
@@ -241,17 +241,16 @@ public class Application {
 								System.out.println("Número do cartão ");
 								String numCartao = sc.next();
 								Dados.isCred(numCartao, conta);
-								if(Dados.isCred(numCartao, conta)!=null) {
+								if (Dados.isCred(numCartao, conta) != null) {
 									System.out.println("Valor da compra ");
 									double valor = sc.nextDouble();
-									CartaoCredito cd = (CartaoCredito) Dados.isCred(numCartao, conta);
-									if (contaB.compraAprovadaCredito(cd, valor) == true) {
-										System.out.println(
-												"Compra aprovada!\nLimite disponivel R$" + cd.getLimite());
+									CartaoCredito CC = (CartaoCredito) Dados.isCred(numCartao, conta);
+									if (contaB.compraAprovadaCredito(CC, valor) == true) {
+										System.out.println("Compra aprovada!\nLimite disponivel R$" + CC.getLimite());
 									} else {
 										System.out.println("Compra não autorizada, excede seu limite ");
 									}
-								}else {
+								} else {
 									System.out.println("error");
 								}
 							}
@@ -308,7 +307,7 @@ public class Application {
 												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
 										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
 										CC.setApolice(apolice);
-										System.out.println(CC.toString());
+										contaB.compraAprovadaCredito(CC, apolice.getValorApolice());
 										System.out.println("\nContrato de seguro de " + seguro.getNome()
 												+ " contratado na data " + apolice.getDataAssinatura() + ""
 												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
@@ -322,6 +321,8 @@ public class Application {
 												+ "segurado.\r\n"
 												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
 										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
+										CC.setApolice(apolice);
+										contaB.compraAprovadaCredito(CC, apolice.getValorApolice());
 										System.out.println("\nContrato de seguro de " + seguro.getNome()
 												+ " contratado na data " + apolice.getDataAssinatura() + ""
 												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
@@ -335,6 +336,8 @@ public class Application {
 												+ "segurado.\r\n"
 												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
 										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
+										CC.setApolice(apolice);
+										contaB.compraAprovadaCredito(CC, apolice.getValorApolice());
 										System.out.println("\nContrato de seguro de " + seguro.getNome()
 												+ " contratado na data " + apolice.getDataAssinatura() + ""
 												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
@@ -346,6 +349,22 @@ public class Application {
 								System.out.println("Indisponivel");
 							}
 
+						}
+
+					} else if (opc == 7) {
+						System.out.println("Informe número do cartão");
+						String numCartao = sc.next();
+						CartaoCredito CC = (CartaoCredito) Dados.isCred(numCartao, conta);
+						if (Dados.isCred(numCartao, conta) != null && CC.getApolice() != null) {
+							Date data = new Date();
+							Date dataC = CC.getApolice().getDataCarrencia();
+							int comparacao=data.compareTo(dataC);
+							if (comparacao>0) {
+								conta.setSaldo(conta.getSaldo()+CC.getApolice().getValorApolice());
+								System.out.println("Valor da apolice ressarcido");
+							}else {
+								System.out.println("Invalido!");
+							}
 						}
 
 					} else if (opc == 10) {

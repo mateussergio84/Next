@@ -73,7 +73,7 @@ public class Apolice {
 	public void setValorApolice(double valorApolice) {
 		this.valorApolice = valorApolice;
 	}
-	
+
 	
 
 }
