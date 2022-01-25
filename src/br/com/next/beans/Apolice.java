@@ -5,17 +5,16 @@ import java.util.Date;
 
 public class Apolice {
 
-	public Apolice(String id, String descricaoCondicoes, double valorApolice,
+	
+	
+	public Apolice(String id, String descricaoCondicoes, double valorApolice, Date dataAssinatura, Date dataCarrencia,
 			Seguro seguro) {
 		super();
 		this.id = id;
 		this.descricaoCondicoes = descricaoCondicoes;
 		this.valorApolice = valorApolice;
-		dataAssinatura = new Date();
-		Calendar c = Calendar.getInstance();
-        c.setTime(dataAssinatura);
-        c.add(Calendar.DATE, 15);
-		this.dataCarrencia = c.getTime();
+		this.dataAssinatura = dataAssinatura;
+		this.dataCarrencia = dataCarrencia;
 		this.seguro = seguro;
 	}
 

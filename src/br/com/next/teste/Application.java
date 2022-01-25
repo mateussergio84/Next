@@ -20,8 +20,10 @@ import br.com.next.beans.Seguro;
 import br.com.next.beans.TipoChavePix;
 import br.com.next.beans.TipoCliente;
 import br.com.next.beans.TipoConta;
+import br.com.next.bo.ApoliceBo;
 import br.com.next.bo.ClienteBo;
 import br.com.next.bo.ContaBo;
+import br.com.next.bo.SeguroBo;
 import br.com.next.utils.Dados;
 
 public class Application {
@@ -285,11 +287,12 @@ public class Application {
 							String numCartao = sc.next();
 							if (Dados.isCred(numCartao, conta) != null) {
 								CartaoCredito CC = (CartaoCredito) Dados.isCred(numCartao, conta);
-								Dados.carregaSeguros();
+								SeguroBo sb = new SeguroBo();
+								ApoliceBo ApB = new ApoliceBo();
 								System.out.println("Deseja ver os seguros disponiveis, digite 1 para sim 2 para não");
 								int lS = sc.nextInt();
 								if (lS == 1) {
-									for (Seguro s : Dados.lSeguros) {
+									for (Seguro s : sb.carregaSeguros()) {
 										System.out.println("Opção " + s.getId() + ":\nSeguro de " + s.getNome() + "\n"
 												+ s.getRegras());
 										System.out.println("\n------------------------\n");
@@ -298,50 +301,39 @@ public class Application {
 											+ "\n2 - para seguro de morte \n3 - para seguro desemprego \n4 - para Sair");
 									int opS = sc.nextInt();
 									if (opS == 1) {
-										Seguro seguro = Dados.addSeguroMorte();
+										Seguro seguro1 = sb.morte;
 										Double valorApolice = 36.0;
-										String descricaoCondicao = "Seguro: " + seguro.getNome() + "\nRegras: \n"
-												+ seguro.getRegras()
+										String descricaoCondicao = "Seguro: " + seguro1.getNome() + "\nRegras: \n"
+												+ seguro1.getRegras()
 												+ "Todos os nossos seguros garantem recuperação de 100% do valor investido pelo\r\n"
 												+ "segurado.\r\n"
 												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
-										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
-										CC.setApolice(apolice);
-										contaB.compraAprovadaCredito(CC, apolice.getValorApolice());
-										System.out.println("\nContrato de seguro de " + seguro.getNome()
-												+ " contratado na data " + apolice.getDataAssinatura() + ""
-												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
-												+ " validas apartir da data " + apolice.getDataCarrencia());
+										Apolice ap = ApB.addApolice("01", descricaoCondicao, valorApolice, seguro1);
+										System.out.println(ApB.exibeApolice(ap));
+										CC.setApolice(ap);
+										contaB.compraAprovadaCredito(CC, ap.getValorApolice());
 									} else if (opS == 2) {
-										Seguro seguro = Dados.addSeguroInvalidez();
+										Seguro seguro2 = sb.invalidez;
 										Double valorApolice = 36.0;
-										String descricaoCondicao = "Seguro: " + seguro.getNome() + "\nRegras: \n"
-												+ seguro.getRegras()
+										String descricaoCondicao = "Seguro: " + seguro2.getNome() + "\nRegras: \n" + seguro2.getRegras()
 												+ "Todos os nossos seguros garantem recuperação de 100% do valor investido pelo\r\n"
 												+ "segurado.\r\n"
 												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
-										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
-										CC.setApolice(apolice);
-										contaB.compraAprovadaCredito(CC, apolice.getValorApolice());
-										System.out.println("\nContrato de seguro de " + seguro.getNome()
-												+ " contratado na data " + apolice.getDataAssinatura() + ""
-												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
-												+ " validas apartir da data " + apolice.getDataCarrencia());
+										Apolice ap = ApB.addApolice("02", descricaoCondicao, valorApolice, seguro2);
+										System.out.println(ApB.exibeApolice(ap));
+										CC.setApolice(ap);
+										contaB.compraAprovadaCredito(CC, ap.getValorApolice());
 									} else if (opS == 3) {
-										Seguro seguro = Dados.addSeguroDesemprego();
+										Seguro seguro3 = sb.desemprego;
 										Double valorApolice = 36.0;
-										String descricaoCondicao = "Seguro: " + seguro.getNome() + "\nRegras: \n"
-												+ seguro.getRegras()
+										String descricaoCondicao = "Seguro: " + seguro3.getNome() + "\nRegras: \n" + seguro3.getRegras()
 												+ "Todos os nossos seguros garantem recuperação de 100% do valor investido pelo\r\n"
 												+ "segurado.\r\n"
 												+ "O valor só poderá ser recuperado se o prazo de carência (15 dias) for cumprido.";
-										Apolice apolice = new Apolice("01", descricaoCondicao, valorApolice, seguro);
-										CC.setApolice(apolice);
-										contaB.compraAprovadaCredito(CC, apolice.getValorApolice());
-										System.out.println("\nContrato de seguro de " + seguro.getNome()
-												+ " contratado na data " + apolice.getDataAssinatura() + ""
-												+ " Sob as condições abaixo:\n" + apolice.getDescricaoCondicoes()
-												+ " validas apartir da data " + apolice.getDataCarrencia());
+										Apolice ap = ApB.addApolice("03", descricaoCondicao, valorApolice, seguro3);
+										System.out.println(ApB.exibeApolice(ap));
+										CC.setApolice(ap);
+										contaB.compraAprovadaCredito(CC, ap.getValorApolice());
 									}
 								}
 
@@ -358,11 +350,11 @@ public class Application {
 						if (Dados.isCred(numCartao, conta) != null && CC.getApolice() != null) {
 							Date data = new Date();
 							Date dataC = CC.getApolice().getDataCarrencia();
-							int comparacao=data.compareTo(dataC);
-							if (comparacao>0) {
-								conta.setSaldo(conta.getSaldo()+CC.getApolice().getValorApolice());
+							int comparacao = data.compareTo(dataC);
+							if (comparacao > 0) {
+								conta.setSaldo(conta.getSaldo() + CC.getApolice().getValorApolice());
 								System.out.println("Valor da apolice ressarcido");
-							}else {
+							} else {
 								System.out.println("Invalido!");
 							}
 						}

@@ -104,7 +104,7 @@ public class Conta {
 			if (c.getNumero().equals(num)) {
 				this.cartoes.remove(c);
 			} else {
-				System.out.println("Cartao não encontrado!");
+				System.out.println("Cartao nï¿½o encontrado!");
 			}
 		}
 		for (Cartao c : cartoes) {

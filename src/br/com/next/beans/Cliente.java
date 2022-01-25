@@ -9,6 +9,7 @@ public class Cliente extends Endereco {
 	private TipoCliente tipo;
 	private Endereco endereco;
 	private Date dataNascimento;
+	
 
 	public String getNome() {
 		return nome;
