@@ -5,7 +5,22 @@ import java.util.Date;
 import java.util.List;
 
 public class Conta {
-	// private Cliente cliente;
+	
+	public Conta() {
+		super();
+	}
+
+	public Conta(Cliente cliente, String numeroConta, double saldo, String senha, TipoConta tipoConta,
+			Date data) {
+		super();
+		this.cliente = cliente;
+		this.numeroConta = numeroConta;
+		this.saldo = saldo;
+		this.senha = senha;
+		this.tipoConta = tipoConta;
+		this.data = data;
+	}
+
 	private Cliente cliente;
 	private String numeroConta;
 	private double saldo;
@@ -14,8 +29,7 @@ public class Conta {
 	private Pix pix;
 	private TipoConta tipoConta;
 	private Date data;
-	private ArrayList<Cartao>cartoes = new ArrayList<Cartao>();
-
+	private ArrayList<Cartao> cartoes = new ArrayList<Cartao>();
 
 	public ArrayList<Cartao> getCartoes() {
 		return cartoes;
@@ -104,13 +118,12 @@ public class Conta {
 			if (c.getNumero().equals(num)) {
 				this.cartoes.remove(c);
 			} else {
-				System.out.println("Cartao nï¿½o encontrado!");
+				System.out.println("Cartao não encontrado!");
 			}
 		}
 		for (Cartao c : cartoes) {
 			System.out.println(c.getNumero());
 		}
 	}
-
 
 }

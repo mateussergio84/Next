@@ -4,12 +4,23 @@ import java.util.Date;
 
 public class Cliente extends Endereco {
 
+	public Cliente(String nome, String cpf, TipoCliente tipo, Endereco endereco, Date dataNascimento) {
+		super();
+		this.nome = nome;
+		this.cpf = cpf;
+		this.tipo = tipo;
+		this.endereco = endereco;
+		this.dataNascimento = dataNascimento;
+	}
+
+	public Cliente(String logradouro, String numero, String cep, String bairro, String cidade, String estado) {
+	}
+
 	private String nome;
 	private String cpf;
 	private TipoCliente tipo;
 	private Endereco endereco;
 	private Date dataNascimento;
-	
 
 	public String getNome() {
 		return nome;

@@ -10,7 +10,7 @@ public class SeguroBo {
 	Seguro seguro;
 
 	public Seguro addSeguro(int id, String nome, String regras) {
-		Seguro seguro = new Seguro(id, regras, regras);
+		Seguro seguro = new Seguro(id,nome,regras);
 		seguro.addSeguro(seguro);
 		return seguro;
 	}

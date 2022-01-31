@@ -7,8 +7,6 @@ import br.com.next.beans.Apolice;
 import br.com.next.beans.Seguro;
 
 public class ApoliceBo {
-
-	
 	
 	public Apolice addApolice(String id, String descricaoCondicoes, double valorApolice, Seguro seguro) {
 		Apolice ap = new Apolice(id, descricaoCondicoes, valorApolice, new Date(), dataCarrencia(), seguro);
